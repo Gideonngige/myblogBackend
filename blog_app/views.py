@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -27,8 +27,8 @@ authe = firebase.auth()
 database = firebase.database()
 
 # Create your views here.
-def members(request):
-    return HttpResponse("Hello world!")
+def index(request):
+    return HttpResponse("Welcome to the G-Blog API")
 
 @csrf_exempt
 @api_view(['POST'])

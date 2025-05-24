@@ -13,3 +13,5 @@ djangorestframework==3.16.0
 firebase-admin==6.8.0
 pillow==11.2.1
 Pyrebase4==4.8.0
+gunicorn
+
