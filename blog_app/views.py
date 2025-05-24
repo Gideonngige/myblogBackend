@@ -3,10 +3,12 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import BlogPost, Users
+from .models import BlogPost, User
 import cloudinary.uploader
 import pyrebase
 import json
+from .serializers import BlogPostSerializer
+from rest_framework.response import Response
 
 
 
@@ -35,6 +37,9 @@ def postblog(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
         image = request.FILES.get('image')
+        user_id = request.POST.get('user_id')
+
+        user = User.objects.filter(id=user_id).first()
 
         if not title or not content or not image:
             return JsonResponse({'error': 'Missing title, content, or image'}, status=400)
@@ -45,7 +50,9 @@ def postblog(request):
             image_url = result.get('secure_url')
 
             # Save blog post to database
+            
             blog = BlogPost.objects.create(
+                userId=user,  # use ForeignKey to User model
                 title=title,
                 image=image_url,  # use URLField in your model
                 content=content,
@@ -71,21 +78,12 @@ def postblog(request):
 @api_view(['GET'])
 def get_blog_posts(request):
     try:
-        posts = BlogPost.objects.all().order_by('-id')  # Latest posts first
-        data = []
-
-        for post in posts:
-            data.append({
-                'id': post.id,
-                'title': post.title,
-                'content': post.content,
-                'image': post.image,
-            })
-
-        return JsonResponse({'posts': data}, status=200)
+        posts = BlogPost.objects.all().order_by('-id')
+        serializer = BlogPostSerializer(posts, many=True)
+        return Response({'posts': serializer.data}, status=200)
 
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        return Response({'error': str(e)}, status=500)
 
 
 #start of signin api
@@ -102,11 +100,13 @@ def signin(request):
                 return JsonResponse({"message": "Email and password are required"}, status=400)
 
             user = authe.sign_in_with_email_and_password(email, password)
-
-            if Users.objects.filter(email=email).exists():
+            
+            if User.objects.filter(email=email).exists():
                 session_id = user['idToken']
                 request.session['uid'] = str(session_id)
-                return JsonResponse({"message": "Successfully logged in"}, status=200)
+                get_user = User.objects.filter(email=email).first()
+                user_id = get_user.id
+                return JsonResponse({"message": "Successfully logged in", "user_id":user_id}, status=200)
             else:
                 return JsonResponse({"message": "No user found with this email, please register"}, status=404)
 
@@ -144,7 +144,7 @@ def signup(request):
                 return JsonResponse({"message": "Missing required fields"}, status=400)
 
             # Check if email already exists
-            if Users.objects.filter(email=email).exists():
+            if User.objects.filter(email=email).exists():
                 return JsonResponse({"message": "Email already exists"}, status=400)
 
             # Create user in Firebase
@@ -156,7 +156,7 @@ def signup(request):
             image_url = result.get('secure_url')
 
             # Save user in your database
-            user = Users(name=name, email=email, profile_image=image_url, password=uid)
+            user = User(name=name, email=email, profile_image=image_url, password=uid)
             user.save()
 
             return JsonResponse({"message": "Successfully signed up"}, status=201)
