@@ -87,6 +87,18 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'blogdb_z1tj',
+        'USER': 'blogdb_z1tj_user',
+        'PASSWORD': 'x1WRrCRlfeUtmo9oqC1vCjkZIdml5F21',
+        'HOST': 'dpg-d0p22gadbo4c73avotb0-a.oregon-postgres.render.com',
+        'PORT': '5432',
+    }
+}
+# postgresql://blogdb_z1tj_user:x1WRrCRlfeUtmo9oqC1vCjkZIdml5F21@dpg-d0p22gadbo4c73avotb0-a.oregon-postgres.render.com/blogdb_z1tj
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
