@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import BlogPost, User, Message
+from .models import BlogPost, User, Message, Order
 import cloudinary.uploader
 import pyrebase
 import json
@@ -205,3 +205,37 @@ def send_message(request):
             print("Error:", str(e))
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 # end of send message api
+
+# start of order service api
+@csrf_exempt
+@api_view(['POST'])
+def create_order(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get("user_id")
+            product_name = data.get("product_name")
+            quantity = data.get("quantity")
+            price = data.get("price")
+
+            if not all([user_id, product_name, quantity, price]):
+                return JsonResponse({"message": "All fields are required"}, status=400)
+
+            user = User.objects.filter(id=user_id).first()
+            if not user:
+                return JsonResponse({"message": "User not found"}, status=404)
+
+            # Create the order
+            order = Order.objects.create(
+                userId=user,
+                product_name=product_name,
+                quantity=quantity,
+                price=price
+            )
+
+            return JsonResponse({"message": "Order created successfully", "order_id": order.id}, status=200)
+
+        except Exception as e:
+            print("Error:", str(e))
+            return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
+# end of order service api
