@@ -3,11 +3,11 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import BlogPost, User, Message, Order
+from .models import BlogPost, User, Message, Order, Notification
 import cloudinary.uploader
 import pyrebase
 import json
-from .serializers import BlogPostSerializer
+from .serializers import BlogPostSerializer, NotificationSerializer
 from rest_framework.response import Response
 
 
@@ -217,6 +217,7 @@ def create_order(request):
             product_name = data.get("product_name")
             quantity = data.get("quantity")
             price = data.get("price")
+            print("About to create notification...")
 
             if not all([user_id, product_name, quantity, price]):
                 return JsonResponse({"message": "All fields are required"}, status=400)
@@ -232,6 +233,13 @@ def create_order(request):
                 quantity=quantity,
                 price=price
             )
+            print("Order created successfully, creating notification...")
+            notification = Notification.objects.create(
+                userId=user,
+                message=f"Your order for {product_name} has been received successfully.",
+                is_read=False
+            )
+            
 
             return JsonResponse({"message": "Order created successfully", "order_id": order.id}, status=200)
 
@@ -239,3 +247,14 @@ def create_order(request):
             print("Error:", str(e))
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 # end of order service api
+
+# start of get notifications api
+@api_view(['GET'])
+def get_user_notifications(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        notifications = Notification.objects.filter(userId=user).order_by('-created_at')
+        serializer = NotificationSerializer(notifications, many=True)
+        return Response(serializer.data)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)

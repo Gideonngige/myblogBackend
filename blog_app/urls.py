@@ -9,4 +9,5 @@ urlpatterns = [
     path('signin/', views.signin, name='signin'),
     path('send_message/', views.send_message, name='send_message'),
     path('create_order/', views.create_order, name='create_order'),
+    path('get_user_notifications/<int:user_id>/', views.get_user_notifications, name='get_user_notifications'),
 ]

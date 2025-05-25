@@ -28,3 +28,12 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} by {self.userId.name} for {self.product_name}"
+
+class Notification(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', default=1)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notification {self.id} for {self.userId.name}"
