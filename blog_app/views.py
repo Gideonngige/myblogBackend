@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import BlogPost, User
+from .models import BlogPost, User, Message
 import cloudinary.uploader
 import pyrebase
 import json
@@ -178,3 +178,30 @@ def resetpassword(request, email):
         message = "Something went wrong, Please check the email, provided is registered or not"
         return JsonResponse({"message": message})
 #start of reset api
+
+# start of send message api
+@csrf_exempt
+@api_view(['POST'])
+def send_message(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get("user_id")
+            message = data.get("message")
+
+            if not user_id or not message:
+                return JsonResponse({"message": "User ID and message are required"}, status=400)
+
+            user = User.objects.filter(id=user_id).first()
+            if not user:
+                return JsonResponse({"message": "User not found"}, status=404)
+
+            # Save the message to the database
+            new_message = Message.objects.create(userId=user, message=message)
+
+            return JsonResponse({"message": "Message sent successfully", "message_id": new_message.id}, status=200)
+
+        except Exception as e:
+            print("Error:", str(e))
+            return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
+# end of send message api

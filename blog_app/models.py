@@ -13,3 +13,8 @@ class BlogPost(models.Model):
     image = models.URLField()  # Stores Cloudinary URL
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+class Message(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages', default=1)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'https://blogapp-iota-wheat.vercel.app/',
+    'https://blogapp-iota-wheat.vercel.app',
 ]
 
 MIDDLEWARE = [
