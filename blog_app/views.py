@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import BlogPost, User, Message, Order, Notification
+from .models import BlogPost, User, Message, Order, Notification, Product
 import cloudinary.uploader
 import pyrebase
 import json
@@ -258,3 +258,57 @@ def get_user_notifications(request, user_id):
         return Response(serializer.data)
     except User.DoesNotExist:
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser])
+def add_product(request):
+    if request.method == 'POST':
+        try:
+            name = request.POST.get("name")
+            description = request.POST.get("description")
+            category = request.POST.get("category")
+            price = request.POST.get("price")
+            stock = request.POST.get("stock")
+            image = request.FILES.get("image")
+
+            if not all([name, category, price, stock, image]):
+                return JsonResponse({"message": "All fields are required"}, status=400)
+
+            # Create the product
+            result = cloudinary.uploader.upload(image)
+            image_url = result.get('secure_url')
+
+            product = Product.objects.create(
+                name=name,
+                description=description,
+                category=category,
+                price=price,
+                stock=stock,
+                image=image_url,
+            )
+
+            return JsonResponse({"message": "Product added successfully", "product_id": product.id}, status=201)
+
+        except Exception as e:
+            print("Error:", str(e))
+            return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
+
+
+def get_products(request):
+    try:
+        products = Product.objects.all()
+        product_list = []
+        for product in products:
+            product_list.append({
+                'id': product.id,
+                'name': product.name,
+                'description': product.description,
+                'category': product.category,
+                'price': str(product.price),
+                'stock': product.stock,
+                'image': product.image,
+            })
+        return JsonResponse({"products": product_list}, status=200)
+    except Exception as e:
+        print("Error:", str(e))
+        return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
