@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import BlogPost, User, Message, Order, Notification, Product
+from .models import BlogPost, User, Message, Order, Notification, Product, ProductOrder
 import cloudinary.uploader
 import pyrebase
 import json
@@ -135,6 +135,7 @@ def signup(request):
         try:
             # Use request.POST and request.FILES for form data and files
             name = request.POST.get("name")
+            phone_number = request.POST.get("phonenumber")
             email = request.POST.get("email")
             password = request.POST.get("password")
             profile_image = request.FILES.get("avatar")
@@ -156,7 +157,7 @@ def signup(request):
             image_url = result.get('secure_url')
 
             # Save user in your database
-            user = User(name=name, email=email, profile_image=image_url, password=uid)
+            user = User(name=name, email=email, phone_number=phone_number, profile_image=image_url, password=uid)
             user.save()
 
             return JsonResponse({"message": "Successfully signed up"}, status=201)
@@ -312,3 +313,139 @@ def get_products(request):
     except Exception as e:
         print("Error:", str(e))
         return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
+
+@csrf_exempt
+@api_view(['GET'])
+def add_stock(request, product_id, additional_stock):
+    try:
+        product = Product.objects.get(id=product_id)
+        if additional_stock < 0:
+            return JsonResponse({"message": "Stock cannot be negative"}, status=400)
+
+        product.stock += additional_stock
+        product.save()
+
+        return JsonResponse({"message": "Stock updated successfully", "new_stock": product.stock}, status=200)
+
+    except Product.DoesNotExist:
+        return JsonResponse({"message": "Product not found"}, status=404)
+    except Exception as e:
+        print("Error:", str(e))
+        return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
+
+# start of order products api
+@csrf_exempt
+@api_view(['POST'])
+def create_product_order(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            product_id = data.get("product_id")
+            user_id = data.get("user_id")
+            product_name = data.get("product_name")
+            quantity = data.get("quantity")
+            price = data.get("price")
+            print("About to create notification...")
+            print("Data received:", data)
+
+            if not all([user_id, product_name, quantity, price]):
+                return JsonResponse({"message": "All fields are required"}, status=400)
+
+            user = User.objects.filter(id=user_id).first()
+            if not user:
+                return JsonResponse({"message": "User not found"}, status=404)
+            
+            product = Product.objects.filter(id=product_id).first()
+            if quantity > product.stock:
+                return JsonResponse({"message":"Your order is more that our stock!!"})
+            # Create the order
+            order = ProductOrder.objects.create(
+                product_id=product,
+                userId=user,
+                product_name=product_name,
+                quantity=quantity,
+                price=price,
+                delivered=False
+            )
+            product.stock -= quantity
+            product.save()
+            print("Order created successfully, creating notification...")
+            notification = Notification.objects.create(
+                userId=user,
+                message=f"Your order for {product_name} has been received successfully.It will be delivered soon.",
+                is_read=False
+            )
+            
+
+            return JsonResponse({"message": "Order created successfully", "order_id": order.id}, status=200)
+
+        except Exception as e:
+            print("Error:", str(e))
+            return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
+# end of order products api
+
+
+# start of get product orders api
+@api_view(['GET'])
+def get_product_orders(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        product_orders = ProductOrder.objects.filter(userId=user, delivered=False).order_by('-created_at')
+        orders_data = []
+        for order in product_orders:
+            orders_data.append({
+                'id': order.id,
+                'product_name': order.product_name,
+                'quantity': order.quantity,
+                'price': str(order.price),
+                'delivered': order.delivered,
+                'created_at': order.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            })
+        return Response({'orders': orders_data}, status=200)
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+# end of get product orders api
+
+# start of get all orders api
+@api_view(['GET'])
+def get_all_orders(request):
+    try:
+        orders = ProductOrder.objects.filter(delivered=False).order_by('-created_at')
+        orders_data = []
+        for order in orders:
+            orders_data.append({
+                'id': order.id,
+                'product_name': order.product_name,
+                'quantity': order.quantity,
+                'price': str(order.price),
+                'delivered': order.delivered,
+                'created_at': order.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                'user_id': order.userId.id,
+                'user_name': order.userId.name
+            })
+        return Response({'orders': orders_data}, status=200)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+# end of get all orders api
+
+# start of confirm order api
+@api_view(['GET'])
+def confirm_order(request, order_id):
+    try:
+        order = ProductOrder.objects.get(id=order_id)
+        order.delivered = True
+        order.save()
+
+        # Create a notification for the user
+        notification = Notification.objects.create(
+            userId=order.userId,
+            message=f"Your order for {order.product_name} has been delivered successfully.",
+            is_read=False
+        )
+
+        return Response({'message': 'Order confirmed successfully'}, status=200)
+    except ProductOrder.DoesNotExist:
+        return Response({'error': 'Order not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+# end of confirm order api
