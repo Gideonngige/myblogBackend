@@ -3,12 +3,15 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import BlogPost, User, Message, Order, Notification, Product, ProductOrder
+from .models import BlogPost, User, Message, Order, Notification, Product, ProductOrder, BlogLikes
 import cloudinary.uploader
 import pyrebase
 import json
 from .serializers import BlogPostSerializer, NotificationSerializer
 from rest_framework.response import Response
+from django.db.models import Sum
+import datetime
+
 
 
 
@@ -159,6 +162,13 @@ def signup(request):
             # Save user in your database
             user = User(name=name, email=email, phone_number=phone_number, profile_image=image_url, password=uid)
             user.save()
+            
+            user2 = User.objects.filter(email=email).first()
+            notification = Notification.objects.create(
+                userId=user2,
+                message="Welcome to G-Blog! Your account has been created successfully.",
+                is_read=False
+            )
 
             return JsonResponse({"message": "Successfully signed up"}, status=201)
 
@@ -254,7 +264,7 @@ def create_order(request):
 def get_user_notifications(request, user_id):
     try:
         user = User.objects.get(id=user_id)
-        notifications = Notification.objects.filter(userId=user).order_by('-created_at')
+        notifications = Notification.objects.filter(userId=user, is_read=False).order_by('-created_at')
         serializer = NotificationSerializer(notifications, many=True)
         return Response(serializer.data)
     except User.DoesNotExist:
@@ -449,3 +459,75 @@ def confirm_order(request, order_id):
     except Exception as e:
         return Response({'error': str(e)}, status=500)
 # end of confirm order api
+
+# start of likes api
+@api_view(['GET'])
+def like_blog_post(request,user_id, blog_id):
+    try:
+        blog_id = BlogPost.objects.filter(id=blog_id).first()
+        user_id = User.objects.filter(id=user_id).first()
+        blog_likes = BlogLikes.objects.filter(userId=user_id, blog_id=blog_id).first()
+        if blog_likes:
+            total_likes = BlogLikes.objects.filter(blog_id=blog_id).count() or 0
+            return Response({'message': 'You have already liked this blog post', 'likes': total_likes}, status=200)
+        else:
+            blog_likes = BlogLikes.objects.create(userId=user_id, blog_id=blog_id, likes=1)
+            # count total likes
+            total_likes = BlogLikes.objects.filter(blog_id=blog_id).count() or 0
+        return Response({'message': 'Blog post liked successfully', 'likes': total_likes}, status=200)
+    except BlogPost.DoesNotExist:
+        return Response({'error': 'Blog post not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+# end of likes api
+
+# mark notifications as read
+@api_view(['GET'])
+def mark_notification_as_read(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id)
+        notification.is_read = True
+        notification.save()
+        return Response({'message': 'Notification marked as read'}, status=200)
+    except Notification.DoesNotExist:
+        return Response({'error': 'Notification not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+# end of mark notifications as read api
+
+# get dashboard data
+@api_view(['GET'])
+def get_dashboard_data(request):
+    try:
+        total_users = User.objects.count()
+        total_blog_posts = BlogPost.objects.count()
+        total_orders = ProductOrder.objects.count()
+        total_products = Product.objects.count()
+        total_notifications = Notification.objects.filter(is_read=False).count()
+        # get daily sales
+        daily_sales = ProductOrder.objects.filter(created_at__date=datetime.date.today()).aggregate(Sum('price'))['price__sum'] or 0
+        # get weekly sales
+        weekly_sales = ProductOrder.objects.filter(created_at__date__gte=datetime.date.today() - datetime.timedelta(days=7)).aggregate(Sum('price'))['price__sum'] or 0
+        # get monthly sales
+        monthly_sales = ProductOrder.objects.filter(created_at__date__gte=datetime.date.today() - datetime.timedelta(days=30)).aggregate(Sum('price'))['price__sum'] or 0
+        # get yearly sales
+        yearly_sales = ProductOrder.objects.filter(created_at__date__gte=datetime.date.today() - datetime.timedelta(days=365)).aggregate(Sum('price'))['price__sum'] or 0
+
+        data = {
+            'total_users': total_users,
+            'total_blog_posts': total_blog_posts,
+            'total_orders': total_orders,
+            'total_products': total_products,
+            'total_notifications': total_notifications,
+            'daily_sales': str(daily_sales),
+            'weekly_sales': str(weekly_sales),
+            'monthly_sales': str(monthly_sales),
+            'yearly_sales': str(yearly_sales),
+            
+        }
+
+        return Response(data, status=200)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+# end of get dashboard data api

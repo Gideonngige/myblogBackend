@@ -20,6 +20,12 @@ class BlogPost(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+class BlogLikes(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_likes', default=1)
+    blog_id = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='likes')
+    likes = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class Message(models.Model):
     userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages', default=1)
     message = models.TextField()

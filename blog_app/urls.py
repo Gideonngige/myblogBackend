@@ -17,4 +17,8 @@ urlpatterns = [
     path('get_product_orders/<int:user_id>/', views.get_product_orders, name='get_product_orders'),
     path('get_all_orders/', views.get_all_orders, name='get_all_orders'),
     path('confirm_order/<int:order_id>/', views.confirm_order, name='confirm_order'),
+    path('like_blog_post/<int:user_id>/<int:blog_id>/', views.like_blog_post, name='like_blog_post'),
+    path('mark_notification_as_read/<int:notification_id>/', views.mark_notification_as_read, name='mark_notification_as_read'),
+    path('get_dashboard_data/', views.get_dashboard_data, name='get_dashboard_data'),
+
 ]
