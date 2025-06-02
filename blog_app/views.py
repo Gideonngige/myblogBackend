@@ -88,6 +88,19 @@ def get_blog_posts(request):
     except Exception as e:
         return Response({'error': str(e)}, status=500)
 
+# get single blog post
+@csrf_exempt
+@api_view(['GET'])
+def get_blog_post(request, post_id):
+    try:
+        post = BlogPost.objects.get(id=post_id)
+        serializer = BlogPostSerializer(post)
+        return Response({'post': serializer.data}, status=200)
+
+    except BlogPost.DoesNotExist:
+        return Response({'error': 'Blog post not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
 
 #start of signin api
 @csrf_exempt
@@ -393,6 +406,69 @@ def create_product_order(request):
             print("Error:", str(e))
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 # end of order products api
+
+# create bulky order api
+@csrf_exempt
+@api_view(['POST'])
+def create_bulk_order(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get("user_id")
+            products = data.get("products", [])  # List of items
+
+            if not user_id or not products:
+                return JsonResponse({"message": "User ID and product list are required"}, status=400)
+
+            user = User.objects.filter(id=user_id).first()
+            if not user:
+                return JsonResponse({"message": "User not found"}, status=404)
+
+            order_ids = []
+            for item in products:
+                product_id = item.get("product_id")
+                product_name = item.get("product_name")
+                quantity = item.get("quantity")
+                price = item.get("price")
+
+                # Check required fields
+                if not all([product_id, product_name, quantity, price]):
+                    return JsonResponse({"message": "Missing product details in one of the items"}, status=400)
+
+                product = Product.objects.filter(id=product_id).first()
+                if not product:
+                    return JsonResponse({"message": f"Product with ID {product_id} not found"}, status=404)
+
+                if quantity > product.stock:
+                    return JsonResponse({"message": f"Not enough stock for {product.name}"}, status=400)
+
+                # Create order
+                order = ProductOrder.objects.create(
+                    product_id=product,
+                    userId=user,
+                    product_name=product_name,
+                    quantity=quantity,
+                    price=price,
+                    delivered=False
+                )
+                product.stock -= quantity
+                product.save()
+                order_ids.append(order.id)
+
+                # Notification for each item
+                Notification.objects.create(
+                    userId=user,
+                    message=f"Order for {product_name} placed successfully. We’ll deliver soon.",
+                    is_read=False
+                )
+
+            return JsonResponse({"message": "All orders created successfully", "order_ids": order_ids}, status=200)
+
+        except Exception as e:
+            print("Error:", str(e))
+            return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
+
+# endof create bulky order api
 
 
 # start of get product orders api
