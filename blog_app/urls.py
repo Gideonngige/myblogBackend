@@ -24,5 +24,6 @@ urlpatterns = [
     path('mark_notification_as_read/<int:notification_id>/', views.mark_notification_as_read, name='mark_notification_as_read'),
     path('get_dashboard_data/', views.get_dashboard_data, name='get_dashboard_data'),
     path('send_latest_blog_email/', views.send_latest_blog_email, name='send_latest_blog_email'),
+    path('get_messages/', views.get_messages, name='get_messages'),
 
 ]

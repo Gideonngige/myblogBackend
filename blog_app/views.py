@@ -7,7 +7,7 @@ from .models import BlogPost, User, Message, Order, Notification, Product, Produ
 import cloudinary.uploader
 import pyrebase
 import json
-from .serializers import BlogPostSerializer, NotificationSerializer
+from .serializers import BlogPostSerializer, NotificationSerializer, MessageSerializer
 from rest_framework.response import Response
 from django.db.models import Sum
 import datetime
@@ -588,6 +588,7 @@ def get_dashboard_data(request):
         total_blog_posts = BlogPost.objects.count()
         total_orders = ProductOrder.objects.count()
         total_products = Product.objects.count()
+        total_messages = Message.objects.count()
         total_notifications = Notification.objects.filter(is_read=False).count()
         # get daily sales
         daily_sales = ProductOrder.objects.filter(created_at__date=datetime.date.today()).aggregate(Sum('price'))['price__sum'] or 0
@@ -602,6 +603,7 @@ def get_dashboard_data(request):
             'total_users': total_users,
             'total_blog_posts': total_blog_posts,
             'total_orders': total_orders,
+            'total_messages':total_messages,
             'total_products': total_products,
             'total_notifications': total_notifications,
             'daily_sales': str(daily_sales),
@@ -643,3 +645,13 @@ def send_latest_blog_email(request):
 
     return Response({"message": "Blog email sent successfully."})
 
+
+# start of get notifications api
+@api_view(['GET'])
+def get_messages(request):
+    try:
+        messages = Message.objects.all().order_by('-created_at')
+        serializer = MessageSerializer(messages, many=True)
+        return Response(serializer.data)
+    except Message.DoesNotExist:
+        return Response({'error': 'Message not found'}, status=status.HTTP_404_NOT_FOUND)
