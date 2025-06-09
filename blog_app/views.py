@@ -11,8 +11,10 @@ from .serializers import BlogPostSerializer, NotificationSerializer
 from rest_framework.response import Response
 from django.db.models import Sum
 import datetime
-
-
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 
 config = {
@@ -145,7 +147,6 @@ def logout(request):
 #start of register api
 @csrf_exempt
 @api_view(['POST'])
-@csrf_exempt
 def signup(request):
     if request.method == 'POST':
         try:
@@ -181,6 +182,14 @@ def signup(request):
                 userId=user2,
                 message="Welcome to G-Blog! Your account has been created successfully.",
                 is_read=False
+            )
+
+            send_mail(
+                subject='Welcome to G-Blog!',
+                message='Your account has been created successfully.',
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
             )
 
             return JsonResponse({"message": "Successfully signed up"}, status=201)
@@ -607,3 +616,30 @@ def get_dashboard_data(request):
     except Exception as e:
         return Response({'error': str(e)}, status=500)
 # end of get dashboard data api
+
+# send email api
+@api_view(['GET'])
+def send_latest_blog_email(request):
+    latest_blog = BlogPost.objects.order_by('-created_at').first()
+
+    if not latest_blog:
+        return Response({"error": "No blog posts found."}, status=404)
+
+    # Generate the email body using an HTML template
+    html_content = render_to_string('email_blog.html', {
+        'title': latest_blog.title,
+        'content': latest_blog.content,
+        'image_url': latest_blog.image
+    })
+
+    email = EmailMessage(
+        subject=f"Latest Blog: {latest_blog.title}",
+        body=html_content,
+        from_email=settings.EMAIL_HOST_USER,
+        to=['gideonushindi94@gmail.com']
+    )
+    email.content_subtype = 'html'  # Important for HTML content
+    email.send(fail_silently=False)
+
+    return Response({"message": "Blog email sent successfully."})
+

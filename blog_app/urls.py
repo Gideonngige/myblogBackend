@@ -23,5 +23,6 @@ urlpatterns = [
     path('like_blog_post/<int:user_id>/<int:blog_id>/', views.like_blog_post, name='like_blog_post'),
     path('mark_notification_as_read/<int:notification_id>/', views.mark_notification_as_read, name='mark_notification_as_read'),
     path('get_dashboard_data/', views.get_dashboard_data, name='get_dashboard_data'),
+    path('send_latest_blog_email/', views.send_latest_blog_email, name='send_latest_blog_email'),
 
 ]
