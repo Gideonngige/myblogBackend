@@ -184,13 +184,13 @@ def signup(request):
                 is_read=False
             )
 
-            send_mail(
-                subject='Welcome to G-Blog!',
-                message='Your account has been created successfully.',
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email],
-                fail_silently=False,
-            )
+            # send_mail(
+            #     subject='Welcome to G-Blog!',
+            #     message='Your account has been created successfully.',
+            #     from_email=settings.EMAIL_HOST_USER,
+            #     recipient_list=[email],
+            #     fail_silently=False,
+            # )
 
             return JsonResponse({"message": "Successfully signed up"}, status=201)
 
