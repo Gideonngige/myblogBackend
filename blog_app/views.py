@@ -180,7 +180,7 @@ def signup(request):
             user2 = User.objects.filter(email=email).first()
             notification = Notification.objects.create(
                 userId=user2,
-                message="Welcome to G-Blog! Your account has been created successfully.",
+                message="Welcome to G-Tech Company! Your account has been created successfully. Read, post blogs and buy your favourite accessories.",
                 is_read=False
             )
 
