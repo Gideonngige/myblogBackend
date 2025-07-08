@@ -53,16 +53,17 @@ class Notification(models.Model):
 # accessories/models.py
 class Product(models.Model):
     CATEGORY_CHOICES = [
-        ('phone', 'Phone'),
-        ('earphone', 'Earphone'),
-        ('headphone', 'Headphone'),
-        ('charger', 'Charger'),
-        ('other', 'Other'),
+        ('Accessories', 'Accessories'),
+        ('Phones', 'Phones'),
+        ('Laptops', 'Laptops'),
+        ('Watches', 'Watches'),
+        ('TVs', 'Tvs'),
+        ('Radios', 'Radios'),
     ]
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="Accessories")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     image = models.URLField()
