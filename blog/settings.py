@@ -93,15 +93,13 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'myblogdb_ezlg',
-        'USER': 'myblogdb_ezlg_user',
-        'PASSWORD': 'ZhpZQg75tVocRFaugA7yMtuOLrcy9iMY',
-        'HOST': 'dpg-d1e75o95pdvs73fkghh0-a.oregon-postgres.render.com',
+        'NAME': 'blogdb_lb6n',
+        'USER': 'blogdb_lb6n_user',
+        'PASSWORD': 'LZdlx4NE1WkcamovUX9Yjkm6iKuhCxAU',
+        'HOST': 'dpg-d2lofrripnbc738getc0-a.oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
