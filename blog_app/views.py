@@ -33,7 +33,7 @@ database = firebase.database()
 
 # Create your views here.
 def index(request):
-    return HttpResponse("Welcome to the G-Blog API")
+    return render(request, 'index.html')
 
 @csrf_exempt
 @api_view(['POST'])

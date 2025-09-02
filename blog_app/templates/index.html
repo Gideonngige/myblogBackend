@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G-Blog API Documentation</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; color: #333; }
+    h1, h2 { color: #0056b3; }
+    .endpoint { border: 1px solid #ddd; background: #fff; padding: 15px; margin: 15px 0; border-radius: 8px; }
+    code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+    pre { background: #272822; color: #f8f8f2; padding: 10px; border-radius: 6px; overflow-x: auto; }
+    .method { font-weight: bold; color: green; }
+    .url { font-family: monospace; color: #d63384; }
+  </style>
+</head>
+<body>
+  <h1>📘 G-Blog API Documentation</h1>
+  <p>Welcome to the G-Blog API. Below is the list of available endpoints.</p>
+
+  <!-- Blog APIs -->
+  <h2>📝 Blog APIs</h2>
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/postblog/</span></p>
+    <p><strong>Description:</strong> Create a new blog post.</p>
+    <pre>
+Request (form-data):
+  title: string
+  content: string
+  image: file
+  user_id: int
+Response:
+  { "message": "Blog post created successfully", "post": {...} }
+    </pre>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/get_blog_posts/</span></p>
+    <p><strong>Description:</strong> Get all blog posts.</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/get_blog_post/&lt;post_id&gt;/</span></p>
+    <p><strong>Description:</strong> Get a single blog post by ID.</p>
+  </div>
+
+  <!-- Auth APIs -->
+  <h2>🔑 Authentication</h2>
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/signin/</span></p>
+    <pre>
+Request (JSON):
+  { "email": "user@example.com", "password": "secret" }
+Response:
+  { "message": "Successfully logged in", "user_id": 1 }
+    </pre>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/signup/</span></p>
+    <pre>
+Request (form-data):
+  name, phonenumber, email, password, avatar (file)
+Response:
+  { "message": "Successfully signed up" }
+    </pre>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/resetpassword/&lt;email&gt;/</span></p>
+    <p><strong>Description:</strong> Send password reset email.</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/logout/</span></p>
+    <p><strong>Description:</strong> Logout user.</p>
+  </div>
+
+  <!-- Messaging -->
+  <h2>💬 Messaging</h2>
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/send_message/</span></p>
+    <pre>
+Request (JSON):
+  { "user_id": 1, "message": "Hello!" }
+Response:
+  { "message": "Message sent successfully", "message_id": 2 }
+    </pre>
+  </div>
+
+  <!-- Orders -->
+  <h2>📦 Orders</h2>
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/create_order/</span></p>
+    <pre>
+Request (JSON):
+  { "user_id": 1, "product_name": "Laptop", "quantity": 2, "price": 1200 }
+Response:
+  { "message": "Order created successfully", "order_id": 5 }
+    </pre>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/create_product_order/</span></p>
+    <p><strong>Description:</strong> Place an order for a product.</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/create_bulk_order/</span></p>
+    <p><strong>Description:</strong> Place multiple product orders in one request.</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/get_product_orders/&lt;user_id&gt;/</span></p>
+    <p><strong>Description:</strong> Get pending orders of a user.</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/get_all_orders/</span></p>
+    <p><strong>Description:</strong> Get all orders (admin).</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/confirm_order/&lt;order_id&gt;/</span></p>
+    <p><strong>Description:</strong> Mark an order as delivered.</p>
+  </div>
+
+  <!-- Products -->
+  <h2>🛍️ Products</h2>
+  <div class="endpoint">
+    <p><span class="method">POST</span> <span class="url">/add_product/</span></p>
+    <p><strong>Description:</strong> Add a product with image upload.</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/get_products/</span></p>
+    <p><strong>Description:</strong> Get all products.</p>
+  </div>
+
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/add_stock/&lt;product_id&gt;/&lt;additional_stock&gt;/</span></p>
+    <p><strong>Description:</strong> Increase stock for a product.</p>
+  </div>
+
+  <!-- Notifications -->
+  <h2>🔔 Notifications</h2>
+  <div class="endpoint">
+    <p><span class="method">GET</span> <span class="url">/get_user_notifications/&lt;user_id&gt;/</span></p>
+    <p><strong>Description:</strong> Fetch unread notifications for a user.</p>
+  </div>
+
+  <footer style="margin-top:40px; text-align:center; font-size:14px; color:#777;">
+    © 2025 G-Blog API Documentation
+  </footer>
+</body>
+</html>
