@@ -93,10 +93,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blogdb_lb6n',
-        'USER': 'blogdb_lb6n_user',
-        'PASSWORD': 'LZdlx4NE1WkcamovUX9Yjkm6iKuhCxAU',
-        'HOST': 'dpg-d2lofrripnbc738getc0-a.oregon-postgres.render.com',
+        'NAME': 'blogdb_v9sd',
+        'USER': 'blogdb_v9sd_user',
+        'PASSWORD': 'zLRc1AcZ8N1CRJ9RV9rTQ2X5kcQ9tSmU',
+        'HOST': 'dpg-d3q9v5ali9vc73c5u91g-a.oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
