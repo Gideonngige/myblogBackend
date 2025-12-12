@@ -124,7 +124,21 @@ def signin(request):
                 request.session['uid'] = str(session_id)
                 get_user = User.objects.filter(email=email).first()
                 user_id = get_user.id
-                return JsonResponse({"message": "Successfully logged in", "user_id":user_id}, status=200)
+                profile_image = get_user.profile_image
+                name = get_user.name
+                email = get_user.email
+                role = get_user.role
+                return JsonResponse(
+                    {
+                        "message": "Successfully logged in", 
+                        "user_id":user_id,
+                        "profile_image": profile_image,
+                        "name": name,
+                        "email": email,
+                        "is_verified": get_user.is_verified,
+                        "role": role,
+                        "token": session_id
+                    }, status=200)
             else:
                 return JsonResponse({"message": "No user found with this email, please register"}, status=404)
 

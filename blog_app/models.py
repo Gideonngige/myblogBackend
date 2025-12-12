@@ -8,8 +8,10 @@ class User(models.Model):
     ROLES = (
         ('user', 'user'),
         ('admin', 'admin'),
+        ('deliveryperson', 'deliveryperson')
     )
-    role = models.CharField(max_length=50,choices=ROLES, default='user')  # 'user' or 'admin'
+    role = models.CharField(max_length=50,choices=ROLES, default='user')
+    is_verified = models.BooleanField(default=False)
     password = models.CharField(max_length=200)
     profile_image = models.URLField()
 
