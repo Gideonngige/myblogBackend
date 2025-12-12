@@ -135,6 +135,7 @@ def signin(request):
                         "profile_image": profile_image,
                         "name": name,
                         "email": email,
+                        "phone_number": get_user.phone_number,
                         "is_verified": get_user.is_verified,
                         "role": role,
                         "token": session_id
