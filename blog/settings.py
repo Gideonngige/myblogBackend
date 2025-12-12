@@ -93,10 +93,10 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'blogdb_v9sd',
-        'USER': 'blogdb_v9sd_user',
-        'PASSWORD': 'zLRc1AcZ8N1CRJ9RV9rTQ2X5kcQ9tSmU',
-        'HOST': 'dpg-d3q9v5ali9vc73c5u91g-a.oregon-postgres.render.com',
+        'NAME': 'gtechdb',
+        'USER': 'gtechdb_user',
+        'PASSWORD': 'KpcEs0jk5q3nLCyd0PrQdPT74ugDDqgu',
+        'HOST': 'dpg-d4tqa3p5pdvs73ea9jvg-a.oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
