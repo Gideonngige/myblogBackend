@@ -124,7 +124,7 @@ def postblog(request):
 
 @csrf_exempt
 @api_view(['GET'])
-@verify_firebase_token
+# @verify_firebase_token
 def get_blog_posts(request):
     try:
         posts = BlogPost.objects.all().order_by('-id')
