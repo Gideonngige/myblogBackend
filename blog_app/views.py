@@ -21,16 +21,11 @@ from firebase_admin import credentials, auth
 import os, json
 from django.http import JsonResponse
 
-# config = {
-#     "apiKey": "AIzaSyDvzmhEaAH7UHCiwchGALP87i2o_-EYAhU",
-#     "authDomain": "blog-26b72.firebaseapp.com",
-#     "databaseURL": "https://blog-26b72-default-rtdb.firebaseio.com/",
-#     "projectId": "blog-26b72",
-#     "storageBucket": "blog-26b72.firebasestorage.app",
-#     "messagingSenderId": "578792566453",
-#    " appId": "1:578792566453:web:7fd8d7912b2feb54bcd8fc",
-#    " measurementId": "G-LNEKVMY72E"
-# }
+import logging
+logger = logging.getLogger("backend")
+
+
+
 firebaseConfig = {
   "apiKey": os.environ.get("FIREBASE_API_KEY"),
   "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN"),
@@ -164,6 +159,9 @@ def signin(request):
             user = authe.sign_in_with_email_and_password(email, password)
             
             if User.objects.filter(email=email).exists():
+                # log user
+                logger.info(f"User sign in: Email: {email}")
+
                 session_id = user['idToken']
                 request.session['uid'] = str(session_id)
                 get_user = User.objects.filter(email=email).first()
@@ -250,6 +248,7 @@ def signup(request):
             #     recipient_list=[email],
             #     fail_silently=False,
             # )
+            logger.info(f"User sign up: Email: {email}, Name: {name}")
 
             return JsonResponse({"message": "Successfully signed up"}, status=201)
 
@@ -265,9 +264,11 @@ def resetpassword(request, email):
     try:
         authe.send_password_reset_email(email)
         message = "A email to reset password is successfully sent"
+        logger.info(f"Email reset link sent to: {email}")
         return JsonResponse({"message": message})
     except:
         message = "Something went wrong, Please check the email, provided is registered or not"
+        logger.info(f"Failed to send reset password email to: {email}")
         return JsonResponse({"message": message})
 #start of reset api
 
@@ -291,10 +292,13 @@ def send_message(request):
             # Save the message to the database
             new_message = Message.objects.create(userId=user, message=message)
 
+            logger.info(f"Message sent by {user.name}: {message}")
+
             return JsonResponse({"message": "Message sent successfully", "message_id": new_message.id}, status=200)
 
         except Exception as e:
             print("Error:", str(e))
+            logger.info(f"Error sending message: {str(e)}")
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 # end of send message api
 
@@ -332,11 +336,13 @@ def create_order(request):
                 is_read=False
             )
             
-
+            # log user here
+            logger.info(f"Order created for {user.name}: {product_name}")
             return JsonResponse({"message": "Order created successfully", "order_id": order.id}, status=200)
 
         except Exception as e:
             print("Error:", str(e))
+            logger.info(f"Error creating order: {str(e)}")
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 # end of order service api
 
@@ -347,8 +353,13 @@ def get_user_notifications(request, user_id):
         user = User.objects.get(id=user_id)
         notifications = Notification.objects.filter(userId=user, is_read=False).order_by('-created_at')
         serializer = NotificationSerializer(notifications, many=True)
+        # log here
+        logger.info(f"User notifications fetched: {user.name} {user.email}")
+
         return Response(serializer.data)
     except User.DoesNotExist:
+        # log user here
+        logger.info(f"User not found: {user_id}")
         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
@@ -378,11 +389,12 @@ def add_product(request):
                 stock=stock,
                 image=image_url,
             )
-
+            logger.info(f"Product added: {name}")
             return JsonResponse({"message": "Product added successfully", "product_id": product.id}, status=201)
 
         except Exception as e:
             print("Error:", str(e))
+            logger.info(f"Error adding product: {str(e)}")
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 
 
@@ -400,9 +412,13 @@ def get_products(request):
                 'stock': product.stock,
                 'image': product.image,
             })
+        # log here
+        logger.info("Products fetched successfully")
+
         return JsonResponse({"products": product_list}, status=200)
     except Exception as e:
         print("Error:", str(e))
+        logger.info(f"Error fetching products: {str(e)}")
         return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 
 @csrf_exempt
@@ -416,12 +432,16 @@ def add_stock(request, product_id, additional_stock):
         product.stock += additional_stock
         product.save()
 
+        logger.info(f"Stock updated for product {product_id}: {additional_stock}")
+
         return JsonResponse({"message": "Stock updated successfully", "new_stock": product.stock}, status=200)
 
     except Product.DoesNotExist:
+        logger.info(f"Product not found: {product_id}")
         return JsonResponse({"message": "Product not found"}, status=404)
     except Exception as e:
         print("Error:", str(e))
+        logger.info(f"Error updating stock: {str(e)}")
         return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 
 # start of order products api
@@ -461,6 +481,9 @@ def create_product_order(request):
             product.stock -= quantity
             product.save()
             print("Order created successfully, creating notification...")
+
+            logger.info(f"Order created for {user.name}: {product_name}")
+
             notification = Notification.objects.create(
                 userId=user,
                 message=f"Your order for {product_name} has been received successfully.It will be delivered soon.",
@@ -472,6 +495,9 @@ def create_product_order(request):
 
         except Exception as e:
             print("Error:", str(e))
+
+            logger.info(f"Error creating order: {str(e)}")
+
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 # end of order products api
 
@@ -523,6 +549,9 @@ def create_bulk_order(request):
                 product.save()
                 order_ids.append(order.id)
 
+                # log user here
+                logger.info(f"Order created for {user.name}: {product_name}")
+
                 # Notification for each item
                 Notification.objects.create(
                     userId=user,
@@ -534,6 +563,7 @@ def create_bulk_order(request):
 
         except Exception as e:
             print("Error:", str(e))
+            logger.info(f"Error creating orders: {str(e)}")
             return JsonResponse({"message": "An error occurred", "error": str(e)}, status=500)
 
 # endof create bulky order api
@@ -555,8 +585,14 @@ def get_product_orders(request, user_id):
                 'delivered': order.delivered,
                 'created_at': order.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             })
+        # log user here
+        logger.info(f"User orders fetched: {user.name} {user.email}")
+
         return Response({'orders': orders_data}, status=200)
     except User.DoesNotExist:
+        # log user here
+        logger.info(f"User not found: {user_id}")
+
         return Response({'error': 'User not found'}, status=404)
 # end of get product orders api
 
@@ -577,8 +613,13 @@ def get_all_orders(request):
                 'user_id': order.userId.id,
                 'user_name': order.userId.name
             })
+        # log user here
+        logger.info("All orders fetched")
+
         return Response({'orders': orders_data}, status=200)
     except Exception as e:
+        print("Error:", str(e))
+        logger.info(f"Error fetching orders: {str(e)}")
         return Response({'error': str(e)}, status=500)
 # end of get all orders api
 
@@ -596,6 +637,8 @@ def confirm_order(request, order_id):
             message=f"Your order for {order.product_name} has been delivered successfully.",
             is_read=False
         )
+        # log user here
+        logger.info(f"Order delivered: {order.product_name} by: {order.userId.name}")
 
         return Response({'message': 'Order confirmed successfully'}, status=200)
     except ProductOrder.DoesNotExist:
