@@ -49,3 +49,268 @@
 [2025-12-14 13:19:22,051] INFO django.server "GET /get_messages/ HTTP/1.1" 200 417
 [2025-12-14 13:19:25,046] INFO backend GET /get_dashboard_data/ | User: anonymous | Status: 200
 [2025-12-14 13:19:25,048] INFO django.server "GET /get_dashboard_data/ HTTP/1.1" 200 193
+[2025-12-16 06:17:08,769] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 06:17:56,239] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 06:18:32,634] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 06:19:03,119] ERROR django.request Internal Server Error: /send_email/
+Traceback (most recent call last):
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py", line 79, in send_email
+    send_mail(subject, message, from_email, recipient_list)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 95, in open
+    self.connection.login(self.username, self.password)
+  File "/usr/lib/python3.12/smtplib.py", line 750, in login
+    raise last_exception
+  File "/usr/lib/python3.12/smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "/usr/lib/python3.12/smtplib.py", line 662, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-430f6c20781sm15708815f8f.24 - gsmtp')
+[2025-12-16 06:19:03,124] INFO backend GET /send_email/ | User: anonymous | Status: 500
+[2025-12-16 06:19:03,125] ERROR django.server "GET /send_email/ HTTP/1.1" 500 138540
+[2025-12-16 06:19:56,542] ERROR django.request Internal Server Error: /send_email/
+Traceback (most recent call last):
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py", line 79, in send_email
+    send_mail(subject, message, from_email, recipient_list)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 95, in open
+    self.connection.login(self.username, self.password)
+  File "/usr/lib/python3.12/smtplib.py", line 750, in login
+    raise last_exception
+  File "/usr/lib/python3.12/smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "/usr/lib/python3.12/smtplib.py", line 662, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-430f280cf05sm19202177f8f.7 - gsmtp')
+[2025-12-16 06:19:56,544] INFO backend GET /send_email/ | User: anonymous | Status: 500
+[2025-12-16 06:19:56,545] ERROR django.server "GET /send_email/ HTTP/1.1" 500 138531
+[2025-12-16 06:23:21,182] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog/settings.py changed, reloading.
+[2025-12-16 06:23:21,746] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 06:23:46,062] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog/settings.py changed, reloading.
+[2025-12-16 06:23:46,616] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 06:24:05,359] ERROR django.request Internal Server Error: /send_email/
+Traceback (most recent call last):
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py", line 79, in send_email
+    send_mail(subject, message, from_email, recipient_list)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 95, in open
+    self.connection.login(self.username, self.password)
+  File "/usr/lib/python3.12/smtplib.py", line 750, in login
+    raise last_exception
+  File "/usr/lib/python3.12/smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "/usr/lib/python3.12/smtplib.py", line 662, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-47a8f74b188sm219475215e9.1 - gsmtp')
+[2025-12-16 06:24:05,362] INFO backend GET /send_email/ | User: anonymous | Status: 500
+[2025-12-16 06:24:05,362] ERROR django.server "GET /send_email/ HTTP/1.1" 500 138507
+[2025-12-16 07:08:18,757] ERROR django.request Internal Server Error: /send_email/
+Traceback (most recent call last):
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py", line 79, in send_email
+    send_mail(subject, message, from_email, recipient_list)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 95, in open
+    self.connection.login(self.username, self.password)
+  File "/usr/lib/python3.12/smtplib.py", line 750, in login
+    raise last_exception
+  File "/usr/lib/python3.12/smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "/usr/lib/python3.12/smtplib.py", line 662, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-47a957de489sm260614785e9.5 - gsmtp')
+[2025-12-16 07:08:18,759] INFO backend GET /send_email/ | User: anonymous | Status: 500
+[2025-12-16 07:08:18,760] ERROR django.server "GET /send_email/ HTTP/1.1" 500 138507
+[2025-12-16 07:16:05,630] ERROR django.request Internal Server Error: /send_email/
+Traceback (most recent call last):
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py", line 79, in send_email
+    send_mail(subject, message, from_email, recipient_list)
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/home/ushindi/Projects/Blog/Backend/venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 95, in open
+    self.connection.login(self.username, self.password)
+  File "/usr/lib/python3.12/smtplib.py", line 750, in login
+    raise last_exception
+  File "/usr/lib/python3.12/smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "/usr/lib/python3.12/smtplib.py", line 662, in auth
+    raise SMTPAuthenticationError(code, resp)
+smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-47a8f8f3894sm231468615e9.15 - gsmtp')
+[2025-12-16 07:16:05,633] INFO backend GET /send_email/ | User: anonymous | Status: 500
+[2025-12-16 07:16:05,634] ERROR django.server "GET /send_email/ HTTP/1.1" 500 138516
+[2025-12-16 07:16:25,851] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 07:17:09,837] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py changed, reloading.
+[2025-12-16 07:17:10,390] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 07:17:47,203] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py changed, reloading.
+[2025-12-16 07:17:47,848] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2025-12-16 07:17:58,566] INFO backend OTP sent to email ['ushindigideon01@gmail.com']
+[2025-12-16 07:17:58,570] INFO backend GET /send_email/ | User: anonymous | Status: 200
+[2025-12-16 07:17:58,572] INFO django.server "GET /send_email/ HTTP/1.1" 200 23

@@ -69,6 +69,20 @@ def verify_firebase_token(view_func):
     return wrapper
 
 
+@api_view(['GET'])
+def send_email(request):
+    subject = 'Hello from ChamaVault'
+    message = 'This is a test email sent from ChamaVault.'
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = ['ushindigideon01@gmail.com']
+
+    send_mail(subject, message, from_email, recipient_list)
+
+    logger.info(f"OTP sent to email {recipient_list}")
+
+    return HttpResponse("Email sent successfully")
+
+
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
