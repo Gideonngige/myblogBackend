@@ -88,16 +88,13 @@ def postblog(request):
             return JsonResponse({'error': 'Missing title, content, or image'}, status=400)
 
         try:
-            # Upload image to Cloudinary
-            result = cloudinary.uploader.upload(image)
-            image_url = result.get('secure_url')
 
             # Save blog post to database
             
             blog = BlogPost.objects.create(
                 userId=user,  # use ForeignKey to User model
                 title=title,
-                image=image_url,  # use URLField in your model
+                image=image,  # use URLField in your model
                 content=content,
             )
 
@@ -107,7 +104,7 @@ def postblog(request):
                     'id': blog.id,
                     'title': blog.title,
                     'content': blog.content,
-                    'image': blog.image
+                    'image': blog.image.url if blog.image else None
                 }
             }, status=200)
 
@@ -157,6 +154,16 @@ def signin(request):
                 return JsonResponse({"message": "Email and password are required"}, status=400)
 
             user = authe.sign_in_with_email_and_password(email, password)
+            id_token = user["idToken"]
+            refresh_token = user["refreshToken"]
+            expires_in = user["expiresIn"]
+            # Get account info
+            info = authe.get_account_info(id_token)
+            email_verified = info["users"][0]["emailVerified"]
+
+            if not email_verified:
+                authe.send_email_verification(id_token)
+                return JsonResponse({"message": "Email not verified"}, status=400)
             
             if User.objects.filter(email=email).exists():
                 # log user
@@ -166,7 +173,7 @@ def signin(request):
                 request.session['uid'] = str(session_id)
                 get_user = User.objects.filter(email=email).first()
                 user_id = get_user.id
-                profile_image = get_user.profile_image
+                profile_image = get_user.profile_image.url if get_user.profile_image else None
                 name = get_user.name
                 email = get_user.email
                 role = get_user.role
@@ -212,10 +219,9 @@ def signup(request):
             phone_number = request.POST.get("phonenumber")
             email = request.POST.get("email")
             password = request.POST.get("password")
-            profile_image = request.FILES.get("avatar")
 
             # Check for missing fields
-            if not all([name, email, password, profile_image]):
+            if not all([name, email, password]):
                 return JsonResponse({"message": "Missing required fields"}, status=400)
 
             # Check if email already exists
@@ -224,14 +230,13 @@ def signup(request):
 
             # Create user in Firebase
             user = authe.create_user_with_email_and_password(email, password)
+            # # Send verification email
+            authe.send_email_verification(user['idToken'])
+
             uid = user['localId']
 
-            # Upload avatar to Cloudinary
-            result = cloudinary.uploader.upload(profile_image)
-            image_url = result.get('secure_url')
-
             # Save user in your database
-            user = User(name=name, email=email, phone_number=phone_number, profile_image=image_url, password=uid)
+            user = User(name=name, email=email, phone_number=phone_number,  password=uid)
             user.save()
             
             user2 = User.objects.filter(email=email).first()
@@ -313,7 +318,8 @@ def create_order(request):
             product_name = data.get("product_name")
             quantity = data.get("quantity")
             price = data.get("price")
-            print("About to create notification...")
+
+            print(f"{user_id}, {product_name}, {quantity}, {price}")
 
             if not all([user_id, product_name, quantity, price]):
                 return JsonResponse({"message": "All fields are required"}, status=400)
@@ -377,9 +383,6 @@ def add_product(request):
             if not all([name, category, price, stock, image]):
                 return JsonResponse({"message": "All fields are required"}, status=400)
 
-            # Create the product
-            result = cloudinary.uploader.upload(image)
-            image_url = result.get('secure_url')
 
             product = Product.objects.create(
                 name=name,
@@ -387,7 +390,7 @@ def add_product(request):
                 category=category,
                 price=price,
                 stock=stock,
-                image=image_url,
+                image=image,
             )
             logger.info(f"Product added: {name}")
             return JsonResponse({"message": "Product added successfully", "product_id": product.id}, status=201)
@@ -410,7 +413,7 @@ def get_products(request):
                 'category': product.category,
                 'price': str(product.price),
                 'stock': product.stock,
-                'image': product.image,
+                'image': product.image.url if product.image else None,
             })
         # log here
         logger.info("Products fetched successfully")

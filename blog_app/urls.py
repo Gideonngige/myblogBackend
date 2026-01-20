@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from .api_views.profile import update_user_profile
+
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -9,6 +11,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('resetpassword/<str:email>/', views.resetpassword, name='resetpassword'),
     path('signin/', views.signin, name='signin'),
+    path('update_user_profile/', update_user_profile, name='update_user_profile'),
     path('send_message/', views.send_message, name='send_message'),
     path('create_order/', views.create_order, name='create_order'),
     path('get_user_notifications/<int:user_id>/', views.get_user_notifications, name='get_user_notifications'),
