@@ -981,3 +981,5 @@ smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepte
 [2026-01-20 13:09:08,552] INFO django.utils.autoreload Watching for file changes with StatReloader
 [2026-01-20 13:09:27,947] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py changed, reloading.
 [2026-01-20 13:09:28,552] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-01-20 13:45:54,988] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog/settings.py changed, reloading.
+[2026-01-20 13:45:55,534] INFO django.utils.autoreload Watching for file changes with StatReloader
