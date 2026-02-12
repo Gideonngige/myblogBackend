@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'https://www.gtechcompany.online',
+    'https://nexinditechcompany.online/',
 ]
 
 MIDDLEWARE = [
