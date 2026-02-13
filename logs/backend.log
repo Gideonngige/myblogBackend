@@ -984,3 +984,90 @@ smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepte
 [2026-01-20 13:45:54,988] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog/settings.py changed, reloading.
 [2026-01-20 13:45:55,534] INFO django.utils.autoreload Watching for file changes with StatReloader
 [2026-02-12 20:13:31,217] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-13 20:53:03,067] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-13 20:54:00,374] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog/settings.py changed, reloading.
+[2026-02-13 20:54:00,967] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-13 20:54:08,120] INFO backend GET / | User: anonymous | Status: 200
+[2026-02-13 20:54:08,121] INFO django.server "GET / HTTP/1.1" 200 5333
+[2026-02-13 20:54:08,258] INFO backend GET /favicon.ico | User: anonymous | Status: 404
+[2026-02-13 20:54:08,259] WARNING django.request Not Found: /favicon.ico
+[2026-02-13 20:54:08,259] WARNING django.server "GET /favicon.ico HTTP/1.1" 404 9090
+[2026-02-13 20:54:11,458] INFO backend GET /admin/ | User: anonymous | Status: 302
+[2026-02-13 20:54:11,459] INFO django.server "GET /admin/ HTTP/1.1" 302 0
+[2026-02-13 20:54:11,588] INFO backend GET /admin/login/ | User: anonymous | Status: 200
+[2026-02-13 20:54:11,588] INFO django.server "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4173
+[2026-02-13 20:54:11,732] INFO django.server "GET /static/admin/css/base.css HTTP/1.1" 304 0
+[2026-02-13 20:54:11,732] INFO django.server "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+[2026-02-13 20:54:11,736] INFO django.server "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+[2026-02-13 20:54:11,756] INFO django.server "GET /static/admin/css/login.css HTTP/1.1" 304 0
+[2026-02-13 20:54:11,763] INFO django.server "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+[2026-02-13 20:54:11,786] INFO django.server "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+[2026-02-13 20:54:11,854] INFO django.server "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+[2026-02-13 20:54:25,193] INFO backend POST /admin/login/ | User: anonymous | Status: 200
+[2026-02-13 20:54:25,194] INFO django.server "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+[2026-02-13 20:54:42,040] INFO backend POST /admin/login/ | User: anonymous | Status: 200
+[2026-02-13 20:54:42,041] INFO django.server "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+[2026-02-13 20:54:53,077] INFO backend POST /admin/login/ | User: anonymous | Status: 200
+[2026-02-13 20:54:53,077] INFO django.server "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+[2026-02-13 20:55:04,182] INFO backend POST /admin/login/ | User: anonymous | Status: 200
+[2026-02-13 20:55:04,182] INFO django.server "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4343
+[2026-02-13 20:55:19,487] INFO backend POST /admin/login/ | User: anonymous | Status: 200
+[2026-02-13 20:55:19,488] INFO django.server "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4347
+[2026-02-13 20:56:25,448] INFO django.utils.autoreload Watching for file changes with StatReloader
+[2026-02-13 20:56:29,211] INFO backend GET / | User: anonymous | Status: 200
+[2026-02-13 20:56:29,221] INFO django.server "GET / HTTP/1.1" 200 5333
+[2026-02-13 20:56:42,319] INFO backend POST /admin/login/ | User: anonymous | Status: 200
+[2026-02-13 20:56:42,320] INFO django.server "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4347
+[2026-02-13 20:57:04,178] INFO backend POST /admin/login/ | User: nexindi | Status: 302
+[2026-02-13 20:57:04,669] INFO django.server "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+[2026-02-13 20:57:06,249] INFO backend GET /admin/ | User: nexindi | Status: 200
+[2026-02-13 20:57:06,251] INFO django.server "GET /admin/ HTTP/1.1" 200 11506
+[2026-02-13 20:57:06,354] INFO django.server "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+[2026-02-13 20:57:06,383] INFO django.server "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+[2026-02-13 20:57:06,383] INFO django.server "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+[2026-02-13 20:57:13,771] INFO backend GET /admin/blog_app/user/ | User: nexindi | Status: 200
+[2026-02-13 20:57:13,773] INFO django.server "GET /admin/blog_app/user/ HTTP/1.1" 200 13282
+[2026-02-13 20:57:13,874] INFO django.server "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+[2026-02-13 20:57:13,886] INFO django.server "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+[2026-02-13 20:57:13,920] INFO django.server "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+[2026-02-13 20:57:13,922] INFO django.server "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+[2026-02-13 20:57:13,930] INFO django.server "GET /static/admin/js/core.js HTTP/1.1" 304 0
+[2026-02-13 20:57:13,943] INFO django.server "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+[2026-02-13 20:57:13,945] INFO django.server "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+[2026-02-13 20:57:14,049] INFO django.server "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+[2026-02-13 20:57:14,051] INFO django.server "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+[2026-02-13 20:57:14,062] INFO django.server "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+[2026-02-13 20:57:15,248] INFO backend GET /admin/jsi18n/ | User: nexindi | Status: 200
+[2026-02-13 20:57:15,250] INFO django.server "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-02-13 20:57:15,379] INFO django.server "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+[2026-02-13 20:57:22,086] INFO backend GET /admin/blog_app/user/3/change/ | User: nexindi | Status: 200
+[2026-02-13 20:57:22,087] INFO django.server "GET /admin/blog_app/user/3/change/ HTTP/1.1" 200 16672
+[2026-02-13 20:57:22,159] INFO django.server "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+[2026-02-13 20:57:22,172] INFO django.server "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+[2026-02-13 20:57:22,265] INFO django.server "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+[2026-02-13 20:57:22,289] INFO django.server "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+[2026-02-13 20:57:23,406] INFO backend GET /admin/jsi18n/ | User: nexindi | Status: 200
+[2026-02-13 20:57:23,407] INFO django.server "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-02-13 20:57:32,642] INFO backend POST /admin/blog_app/user/3/change/ | User: nexindi | Status: 302
+[2026-02-13 20:57:32,644] INFO django.server "POST /admin/blog_app/user/3/change/ HTTP/1.1" 302 0
+[2026-02-13 20:57:34,432] INFO backend GET /admin/blog_app/user/ | User: nexindi | Status: 200
+[2026-02-13 20:57:34,433] INFO django.server "GET /admin/blog_app/user/ HTTP/1.1" 200 13504
+[2026-02-13 20:57:35,797] INFO backend GET /admin/jsi18n/ | User: nexindi | Status: 200
+[2026-02-13 20:57:35,798] INFO django.server "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-02-13 20:57:35,910] INFO django.server "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+[2026-02-13 21:08:05,007] INFO backend GET /admin/blog_app/user/ | User: nexindi | Status: 200
+[2026-02-13 21:08:05,008] INFO django.server "GET /admin/blog_app/user/ HTTP/1.1" 200 13593
+[2026-02-13 21:08:06,396] INFO backend GET /admin/jsi18n/ | User: nexindi | Status: 200
+[2026-02-13 21:08:06,397] INFO django.server "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-02-13 21:08:10,822] INFO backend GET /admin/blog_app/user/4/change/ | User: nexindi | Status: 200
+[2026-02-13 21:08:10,823] INFO django.server "GET /admin/blog_app/user/4/change/ HTTP/1.1" 200 16337
+[2026-02-13 21:08:12,838] INFO backend GET /admin/jsi18n/ | User: nexindi | Status: 200
+[2026-02-13 21:08:12,838] INFO django.server "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-02-13 21:08:19,983] INFO backend POST /admin/blog_app/user/4/change/ | User: nexindi | Status: 302
+[2026-02-13 21:08:19,984] INFO django.server "POST /admin/blog_app/user/4/change/ HTTP/1.1" 302 0
+[2026-02-13 21:08:21,813] INFO backend GET /admin/blog_app/user/ | User: nexindi | Status: 200
+[2026-02-13 21:08:21,814] INFO django.server "GET /admin/blog_app/user/ HTTP/1.1" 200 13845
+[2026-02-13 21:08:23,167] INFO backend GET /admin/jsi18n/ | User: nexindi | Status: 200
+[2026-02-13 21:08:23,169] INFO django.server "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+[2026-02-13 21:21:33,905] INFO django.utils.autoreload /home/ushindi/Projects/Blog/Backend/myblogBackend/blog_app/views.py changed, reloading.
+[2026-02-13 21:21:37,956] INFO django.utils.autoreload Watching for file changes with StatReloader
